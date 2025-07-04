@@ -30,9 +30,12 @@ def make_video(file_data_list, panel_duration):
             if name.lower().endswith(".zip"):
                 with zipfile.ZipFile(file_path, 'r') as zip_ref:
                     zip_ref.extractall(tmpdir)
-                    for extracted in sorted(zip_ref.namelist()):
-                        if extracted.lower().endswith(('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.gif')):
-                            image_paths.append(os.path.join(tmpdir, extracted))
+                
+                # 🔍 Walk through extracted folder structure to find images
+                for root, _, files in os.walk(tmpdir):
+                    for fname in sorted(files):
+                        if fname.lower().endswith(('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.gif')):
+                            image_paths.append(os.path.join(root, fname))
             elif name.lower().endswith(('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.gif')):
                 image_paths.append(file_path)
 
